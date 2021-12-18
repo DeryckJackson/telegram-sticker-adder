@@ -11,7 +11,7 @@ router.get('/', (req, res) => {
 
 router.post(`/${process.env.BOT_TOKEN}`, async (req, res, next) => {
   try {
-    const userId = req.body.result[0].message.from.id;
+    const userId = req.body.message.from.id;
 
     const text = 'Stop messaging me, I\'m not done yet.';
     const body = {
