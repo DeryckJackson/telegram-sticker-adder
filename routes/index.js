@@ -5,7 +5,7 @@ const axios = require('axios');
 
 axios.defaults.baseUrl = `https://api.telegram.org/bot${process.env.BOT_TOKEN}`;
 
-router.post(`/${process.env.BOT_TOKEN}`, (req, res, next) => {
+router.post(`/${process.env.BOT_TOKEN}`, async (req, res, next) => {
   try {
     const userId = req.body.result[0].message.from.id;
 
@@ -15,7 +15,7 @@ router.post(`/${process.env.BOT_TOKEN}`, (req, res, next) => {
       text
     };
 
-    axios.post('/sendMessage', body);
+    await axios.post('/sendMessage', body);
 
     res.status(200);
   } catch (err) {
