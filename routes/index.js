@@ -5,7 +5,7 @@ const axios = require('axios');
 
 axios.defaults.baseURL = `https://api.telegram.org/bot${process.env.BOT_TOKEN}`;
 
-router.get('/', (res) => {
+router.get('/', (req, res) => {
   res.status(200).send("Ok");
 });
 
