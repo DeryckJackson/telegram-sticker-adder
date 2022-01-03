@@ -1,9 +1,6 @@
-const { write } = require('fs');
-
 class StickerBot {
   #axios = require('axios');
   #sharp = require('sharp');
-  #fs = require('fs');
 
   constructor(token) {
     this.token = token;

@@ -7,9 +7,13 @@
   },
   "scripts": {
     "start": "node ./bin/www",
-    "dev": "nodemon ./bin/www"
+    "dev": "nodemon ./bin/www",
+    "ds": "gcloud beta emulators datastore start",
+    "setDevEnv": "$(gcloud beta emulators datastore env-init)",
+    "unsetDevEnv": "$(gcloud beta emulators datastore env-unset)"
   },
   "dependencies": {
+    "@google-cloud/datastore": "^6.6.2",
     "axios": "^0.24.0",
     "debug": "~2.6.9",
     "dotenv": "^10.0.0",
