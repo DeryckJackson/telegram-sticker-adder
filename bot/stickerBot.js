@@ -1,3 +1,5 @@
+const FormData = require('form-data');
+
 class StickerBot {
   #axios = require('axios');
   #sharp = require('sharp');
@@ -5,6 +7,27 @@ class StickerBot {
   constructor(token) {
     this.token = token;
     this.#axios.defaults.baseURL = `https://api.telegram.org/bot${token}`;
+  }
+
+  async createStickerPackPhoto(user, picBuffer) {
+    const { id, packName, packTitle, emojis } = user;
+    const formData = new FormData();
+
+    formData.append('user_id', id);
+    formData.append('name', `${packName}_by_StickerAdderBot`);
+    formData.append('title', packTitle);
+    formData.append('png_sticker', picBuffer, 'file.png');
+    formData.append('emojis', emojis);
+
+    try {
+      await this.#axios.post(`/createNewStickerSet`, formData, {
+        headers: formData.getHeaders()
+      });
+    } catch (error) {
+      console.error(error);
+    }
+
+    return Promise.resolve(true);
   }
 
   async sendMessage(msg, id) {

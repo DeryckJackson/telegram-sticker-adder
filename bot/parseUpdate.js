@@ -1,57 +1,112 @@
 require('dotenv').config();
+const emojiRegex = require('emoji-regex');
+
 const StickerBot = require('./stickerBot');
 const { getUser, upsertUser } = require('../datastore/index');
-const { createPack } = require('./regex');
-const { getPackNameRes, invalidInputRes, getPackEmojisRes } = require('./responses');
+const { createPackCommand, createPackName } = require('./regex');
+const res = require('./responses');
 
 async function parseUpdate(update) {
   const bot = new StickerBot(process.env.BOT_TOKEN);
 
   const { message } = update;
-  const { from, text, sticker } = message;
+  const { from, text, sticker, photo } = message;
   const { id } = from;
 
   let user;
 
   try {
     user = await getUser(id);
-    user.userId = id;
+    user.id = id;
   } catch (error) {
     console.error(error);
   }
 
   if (!user) {
     user = {
-      userId: id,
+      id,
       menuState: 'idle',
       packName: '',
+      packTitle: '',
       emojis: ''
     };
   }
 
   if (user.menuState === 'idle') {
-    if (createPack.test(text)) {
+    if (createPackCommand.test(text)) {
       user.menuState = 'packGetName';
-      bot.sendMessage(getPackNameRes, user.userId);
+      bot.sendMessage(res.getPackNameRes, user.id);
     } else {
-      bot.sendMessage(invalidInputRes, user.userId);
+      res.sendMessage(res.invalidInputRes, user.id);
     }
   }
 
   if (user.menuState === 'packGetName') {
     if (!text) {
-      bot.sendMessage(invalidInputRes, user.userId);
+      bot.sendMessage(res.invalidInputRes, user.id);
+    } else if (!createPackName.test(text) && text.length <= 64) {
+      bot.sendMessage(res.invalidPackNameRes, user.id);
+    } else {
+      user.menuState = 'packGetTitle';
+      user.packName = text.trim();
+      bot.sendMessage(res.getPackEmojisRes, user.id);
+    }
+  }
+
+  if (user.menuState === 'packGetTitle') {
+    if (!text) {
+      bot.sendMessage(res.invalidInputRes, user.id);
+    } else if (text.length > 64) {
+      bot.sendMessage(res.titleTooLongRes, user.id);
     } else {
       user.menuState = 'packGetEmojis';
-      user.packName = text.trim();
-      bot.sendMessage(getPackEmojisRes, user.userId);
+      user.packTitle = text;
+      bot.sendMessage(res.getPackEmojisRes, user.id);
+    }
+  }
+
+  if (user.menuState === 'packGetEmojis') {
+    const eRegex = emojiRegex();
+
+    if (!text) {
+      bot.sendMessage(res.invalidInputRes, user.id);
+    } else if (!eRegex.test(text)) {
+      bot.sendMessage(res.invalidEmojiRes, user.id);
+    } else {
+      user.menuState = 'packGetSticker';
+      user.emojis = text;
+      bot.sendMessage(res.getPackStickerRes, user.id);
+    }
+  }
+
+  if (user.menuState === 'packGetSticker') {
+    if (sticker && !photo) {
+      const { file_id } = sticker;
+
+    } else if (!sticker && photo) {
+      const fileId = photo[photo.length - 1].file_id;
+
+      const pic = await bot.getFile(fileId);
+      const picBuffer = await bot.resize(pic);
+      await bot.createStickerPackPhoto(user, picBuffer);
+
+      bot.sendMessage(
+        `Success! Your new pack can be found here. \n\n t.me/addstickers/${user.packName}_by_StickerAdderBot/`,
+        user.id
+      );
+
+      user = {
+        id: user.id,
+        menuState: 'idle',
+        packName: '',
+        packTitle: '',
+        emojis: ''
+      };
     }
   }
 
   try {
-    const { userId, menuState, packName, emojis } = user;
-
-    await upsertUser(userId, menuState, packName, emojis);
+    await upsertUser(user);
   } catch (error) {
     console.error(error);
   }

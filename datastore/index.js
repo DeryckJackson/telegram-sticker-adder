@@ -1,11 +1,14 @@
 const { Datastore } = require('@google-cloud/datastore');
 const ds = new Datastore();
 
-async function upsertUser(userId, menuState = 'idle', packName = '', emojis = '') {
-  const userKey = ds.key(['User', userId]);
+async function upsertUser(user) {
+  const { id, menuState, packName, packTitle, emojis } = user;
+
+  const userKey = ds.key(['User', id]);
   const userData = {
     menuState,
     packName,
+    packTitle,
     emojis
   };
 
