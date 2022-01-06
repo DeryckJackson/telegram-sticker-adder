@@ -83,12 +83,18 @@ async function parseUpdate(update) {
     if (sticker && !photo) {
       const { file_id } = sticker;
 
+      await bot.createPackSticker(user, file_id);
+
+      bot.sendMessage(
+        `Success! Your new pack can be found here. \n\n t.me/addstickers/${user.packName}_by_StickerAdderBot/`,
+        user.id
+      );
     } else if (!sticker && photo) {
       const fileId = photo[photo.length - 1].file_id;
 
       const pic = await bot.getFile(fileId);
       const picBuffer = await bot.resize(pic);
-      await bot.createStickerPackPhoto(user, picBuffer);
+      await bot.createPackPhoto(user, picBuffer);
 
       bot.sendMessage(
         `Success! Your new pack can be found here. \n\n t.me/addstickers/${user.packName}_by_StickerAdderBot/`,

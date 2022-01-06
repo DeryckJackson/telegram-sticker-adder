@@ -17,7 +17,11 @@ async function upsertUser(user) {
     data: userData
   };
 
-  await ds.upsert(entity);
+  try {
+    await ds.upsert(entity);
+  } catch (error) {
+    console.error(error);
+  }
 
   return Promise.resolve(true);
 }
@@ -26,7 +30,13 @@ async function getUser(userId) {
   const query = ds.createQuery('User')
     .filter('__key__', '=', ds.key(['User', userId]));
 
-  const [user] = await ds.runQuery(query);
+  let user;
+
+  try {
+    [user] = await ds.runQuery(query);
+  } catch (error) {
+    console.error(error);
+  }
 
   if (user.length === 0) {
     return Promise.resolve(null);

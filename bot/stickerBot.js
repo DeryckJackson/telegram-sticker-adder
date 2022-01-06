@@ -9,7 +9,7 @@ class StickerBot {
     this.#axios.defaults.baseURL = `https://api.telegram.org/bot${token}`;
   }
 
-  async createStickerPackPhoto(user, picBuffer) {
+  async createPackPhoto(user, picBuffer) {
     const { id, packName, packTitle, emojis } = user;
     const formData = new FormData();
 
@@ -23,6 +23,26 @@ class StickerBot {
       await this.#axios.post(`/createNewStickerSet`, formData, {
         headers: formData.getHeaders()
       });
+    } catch (error) {
+      console.error(error);
+    }
+
+    return Promise.resolve(true);
+  }
+
+  async createPackSticker(user, fileId) {
+    const { id, packName, packTitle, emojis } = user;
+
+    const body = {
+      user_id: id,
+      name: `${packName}_by_StickerAdderBot`,
+      title: packTitle,
+      emojis,
+      png_sticker: fileId
+    };
+
+    try {
+      await this.#axios.post(`/createNewStickerSet`, body);
     } catch (error) {
       console.error(error);
     }
