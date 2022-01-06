@@ -89,6 +89,14 @@ async function parseUpdate(update) {
         `Success! Your new pack can be found here. \n\n t.me/addstickers/${user.packName}_by_StickerAdderBot/`,
         user.id
       );
+
+      user = {
+        id: user.id,
+        menuState: 'idle',
+        packName: '',
+        packTitle: '',
+        emojis: ''
+      };
     } else if (!sticker && photo) {
       const fileId = photo[photo.length - 1].file_id;
 
