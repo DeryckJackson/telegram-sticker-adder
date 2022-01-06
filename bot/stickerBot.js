@@ -24,7 +24,7 @@ class StickerBot {
         headers: formData.getHeaders()
       });
     } catch (error) {
-      console.error(error);
+      console.log(error.request.data);
     }
 
     return Promise.resolve(true);
@@ -44,7 +44,9 @@ class StickerBot {
     try {
       await this.#axios.post(`/createNewStickerSet`, body);
     } catch (error) {
-      console.error(error);
+      console.error(error.response.data);
+      this.sendMessage(error.response.data.description, id);
+      throw new Error(error.response.data.description);
     }
 
     return Promise.resolve(true);

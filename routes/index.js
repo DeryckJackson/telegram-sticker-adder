@@ -17,8 +17,6 @@ router.get('/', async (req, res) => {
 
 router.post(`/${process.env.BOT_TOKEN}`, async (req, res, next) => {
   try {
-    // const text = 'Stop messaging me, I\'m not done yet.';
-
     const { body } = req;
 
     parseUpdate(body);
