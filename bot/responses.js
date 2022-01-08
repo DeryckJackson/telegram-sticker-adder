@@ -1,3 +1,4 @@
+const cancel = 'Ok, canceling last command. Not like I was doing anything anyways.';
 const getPackName = 'Please send me a name for your new pack. \n\n Can contain only english letters, digits and undersco. Must begin with a letter and can\'t contain consecutive undersco';
 const getPackEmojis = 'Please send me which emojis you want associated with your new sticker. \n\n You can list several emoji in one message, but I recommend using no more than two per sticker.';
 const getPackSticker = 'Please send me a sticker or an image to add as the first sticker of your new pack.';
@@ -8,6 +9,7 @@ const invalidInput = 'I didn\'t understand that, please try again.';
 const titleTooLong = 'Sorry that name is too long, please shorten it to 64 characters or less.';
 
 module.exports = {
+  cancel,
   getPackName,
   getPackEmojis,
   getPackSticker,

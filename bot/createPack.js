@@ -73,32 +73,28 @@ async function createPack(user, message) {
         user.id
       );
 
-      user = {
-        id: user.id,
-        menuState: 'idle',
-        packName: '',
-        packTitle: '',
-        emojis: ''
-      };
+      user = bot.blankUser(user.id);
     } else if (!sticker && photo) {
       const fileId = photo[photo.length - 1].file_id;
 
-      const pic = await bot.getFile(fileId);
+      try {
+        const pic = await bot.getFile(fileId);
+      } catch (error) {
+        throw new Error(error);
+      }
       const picBuffer = await bot.resize(pic);
-      await bot.createPackPhoto(user, picBuffer);
+      try {
+        await bot.createPackPhoto(user, picBuffer);
+      } catch (error) {
+        throw new Error(error);
+      }
 
       bot.sendMessage(
         `Success! Your new pack can be found here. \n\n t.me/addstickers/${user.packName}_by_StickerAdderBot/`,
         user.id
       );
 
-      user = {
-        id: user.id,
-        menuState: 'idle',
-        packName: '',
-        packTitle: '',
-        emojis: ''
-      };
+      user = bot.blankUser(user.id);
     }
   }
 

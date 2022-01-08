@@ -2,7 +2,7 @@ require('dotenv').config();
 
 const StickerBot = require('./stickerBot');
 const { getUser, upsertUser } = require('../datastore/index');
-const { createPackCommand, createPackName } = require('./regex');
+const { createPackCommand, createPackName, cancelCommand } = require('./regex');
 const createPack = require('./createPack');
 const res = require('./responses');
 
@@ -23,16 +23,14 @@ async function parseUpdate(update) {
   }
 
   if (!user) {
-    user = {
-      id,
-      menuState: 'idle',
-      packName: '',
-      packTitle: '',
-      emojis: ''
-    };
+    user = bot.blankUser(user.id);
   }
 
-  if (user.menuState.slice(0, 4) === 'pack' || createPackCommand.test(message.text)) {
+  if (cancelCommand.test(message.text)) {
+    bot.sendMessage(res.cancel, user.id);
+
+    user = bot.blankUser(user.id);
+  } else if (user.menuState.slice(0, 4) === 'pack' || createPackCommand.test(message.text)) {
     try {
       user = await createPack(user, message);
     } catch (error) {

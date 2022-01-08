@@ -9,6 +9,16 @@ class StickerBot {
     this.#axios.defaults.baseURL = `https://api.telegram.org/bot${token}`;
   }
 
+  blankUser(id) {
+    return {
+      id,
+      menuState: 'idle',
+      packName: '',
+      packTitle: '',
+      emojis: ''
+    };
+  }
+
   async createPackPhoto(user, picBuffer) {
     const { id, packName, packTitle, emojis } = user;
     const formData = new FormData();
@@ -24,7 +34,9 @@ class StickerBot {
         headers: formData.getHeaders()
       });
     } catch (error) {
-      console.log(error.request.data);
+      this.sendMessage(error.response.data.description, id);
+      console.error(error.response.data);
+      throw new Error(error.response.data.description);
     }
 
     return Promise.resolve(true);
@@ -86,7 +98,8 @@ class StickerBot {
         });
       });
     } catch (error) {
-      console.error(error);
+      console.error(error.response.data);
+      throw new Error(error.response.data.description);
     }
   }
 
