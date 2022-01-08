@@ -1,25 +1,25 @@
 require('dotenv').config();
 var express = require('express');
+const parseUpdate = require('../bot/parseUpdate');
+const StickerBot = require('../bot/stickerBot');
+const { getUser, upsertUser } = require('../datastore/index');
 var router = express.Router();
-const axios = require('axios');
 
-axios.defaults.baseURL = `https://api.telegram.org/bot${process.env.BOT_TOKEN}`;
+const bot = new StickerBot(process.env.BOT_TOKEN);
 
-router.get('/', (req, res) => {
-  res.status(200).send("Ok");
+router.get('/', async (req, res) => {
+  const { id } = req.body;
+
+  const user = await getUser(id);
+
+  res.status(200).send(user);
 });
 
 router.post(`/${process.env.BOT_TOKEN}`, async (req, res, next) => {
   try {
-    const userId = req.body.message.from.id;
+    const { body } = req;
 
-    const text = 'Stop messaging me, I\'m not done yet.';
-    const body = {
-      chat_id: userId,
-      text
-    };
-
-    const response = await axios.post('/sendMessage', body);
+    parseUpdate(body);
 
     res.status(200).send("Ok");
   } catch (err) {

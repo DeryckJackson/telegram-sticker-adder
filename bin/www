@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 require("dotenv").config();
-
+'use stict';
 /**
  * Module dependencies.
  */
