@@ -18,6 +18,7 @@ async function createPack(user, message) {
     } else {
       bot.sendMessage(res.invalidInput, user.id);
     }
+    return Promise.resolve(user);
   }
 
   if (user.menuState === 'packGetName') {
@@ -28,8 +29,9 @@ async function createPack(user, message) {
     } else {
       user.menuState = 'packGetTitle';
       user.packName = text.trim();
-      bot.sendMessage(res.getPackEmojis, user.id);
+      bot.sendMessage(res.getEmojis, user.id);
     }
+    return Promise.resolve(user);
   }
 
   if (user.menuState === 'packGetTitle') {
@@ -40,8 +42,9 @@ async function createPack(user, message) {
     } else {
       user.menuState = 'packGetEmojis';
       user.packTitle = text;
-      bot.sendMessage(res.getPackEmojis, user.id);
+      bot.sendMessage(res.getEmojis, user.id);
     }
+    return Promise.resolve(user);
   }
 
   if (user.menuState === 'packGetEmojis') {
@@ -56,10 +59,11 @@ async function createPack(user, message) {
       user.emojis = text;
       bot.sendMessage(res.getPackSticker, user.id);
     }
+    return Promise.resolve(user);
   }
 
   if (user.menuState === 'packGetSticker') {
-    if (sticker && !photo) {
+    if (sticker) {
       const { file_id } = sticker;
 
       try {
@@ -74,7 +78,7 @@ async function createPack(user, message) {
       );
 
       user = bot.blankUser(user.id);
-    } else if (!sticker && photo) {
+    } else if (photo) {
       const fileId = photo[photo.length - 1].file_id;
 
       try {
@@ -96,9 +100,8 @@ async function createPack(user, message) {
 
       user = bot.blankUser(user.id);
     }
+    return Promise.resolve(user);
   }
-
-  return Promise.resolve(user);
 }
 
 module.exports = createPack;
