@@ -32,13 +32,13 @@ async function parseUpdate(update) {
     bot.sendMessage(res.cancel, user.id);
 
     user = bot.blankUser(user.id);
-  } else if (user.menuState.slice(0, 4) === 'pack' || message.text.trim() === '/create_sticker_pack') {
+  } else if (user.menuState.slice(0, 4) === 'pack' || regex.createPackCommand.test(message.text)) {
     try {
       user = await createPack(user, message);
     } catch (error) {
       console.error(error);
     }
-  } else if (user.menuState.slice(0, 7) === 'sticker' || message.text.trim() === '/add_sticker') {
+  } else if (user.menuState.slice(0, 7) === 'sticker' || regex.addStickerCommand.test(message.text)) {
     try {
       user = await addSticker(user, message);
     } catch (error) {
