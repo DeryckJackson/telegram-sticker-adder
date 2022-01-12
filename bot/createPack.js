@@ -8,16 +8,11 @@ const res = require('./responses');
 async function createPack(user, message) {
   const bot = new StickerBot(process.env.BOT_TOKEN);
 
-  const { from, text, sticker, photo } = message;
-  const { id } = from;
+  const { text, sticker, photo } = message;
 
   if (user.menuState === 'idle') {
-    if (createPackCommand.test(text)) {
-      user.menuState = 'packGetName';
-      bot.sendMessage(res.getPackName, user.id);
-    } else {
-      bot.sendMessage(res.invalidInput, user.id);
-    }
+    user.menuState = 'packGetName';
+    bot.sendMessage(res.getPackName, user.id);
     return Promise.resolve(user);
   }
 
