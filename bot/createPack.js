@@ -24,7 +24,7 @@ async function createPack(user, message) {
     } else {
       user.menuState = 'packGetTitle';
       user.packName = text.trim();
-      bot.sendMessage(res.getEmojis, user.id);
+      bot.sendMessage(res.getPackTitle, user.id);
     }
     return Promise.resolve(user);
   }
