@@ -6,7 +6,6 @@ const regex = require('./regex');
 const createPack = require('./createPack');
 const addSticker = require('./addSticker');
 const res = require('./responses');
-const { text } = require('express');
 
 async function parseUpdate(update) {
   const bot = new StickerBot(process.env.BOT_TOKEN);

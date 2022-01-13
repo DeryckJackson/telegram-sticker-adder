@@ -8,11 +8,7 @@ var router = express.Router();
 const bot = new StickerBot(process.env.BOT_TOKEN);
 
 router.get('/', async (req, res) => {
-  const { id } = req.body;
-
-  const user = await getUser(id);
-
-  res.status(200).send(user);
+  res.status(200).send('Ok');
 });
 
 router.post(`/${process.env.BOT_TOKEN}`, async (req, res, next) => {

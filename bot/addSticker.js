@@ -4,37 +4,34 @@ const emojiRegex = require('emoji-regex');
 const StickerBot = require('./stickerBot');
 const res = require('./responses');
 const regex = require('./regex');
+const c = require('./menuConstants');
 
 async function addSticker(user, message) {
   const bot = new StickerBot(process.env.BOT_TOKEN);
 
   const { text, sticker, photo } = message;
 
-  if (user.menuState === 'idle') {
-    user.menuState = 'stickerGetPackName';
+  if (user.menuState === c.idle) {
+    user.menuState = c.stickerGetPackName;
     bot.sendMessage(res.stickerGetPackName, user.id);
-    return Promise.resolve(user);
-  }
 
-  if (user.menuState === 'stickerGetPackName') {
+    return Promise.resolve(user);
+  } else if (user.menuState === c.stickerGetPackName) {
     if (!regex.byStickerAdderBot.test(sticker.set_name)) {
       bot.sendMessage(res.invalidStickerPackName, user.id);
     } else if (sticker) {
-      user.menuState = 'stickerGetEmojis';
+      user.menuState = c.stickerGetEmojis;
       user.packName = sticker.set_name;
       bot.sendMessage(res.getEmojis, user.id);
     } else {
-      console.log('26');
       bot.sendMessage(res.invalidInput, user.id);
     }
+
     return Promise.resolve(user);
-  }
-
-  const eRegex = emojiRegex();
-
-  if (user.menuState === 'stickerGetEmojis') {
+  } else if (user.menuState === c.stickerGetEmojis) {
+    const eRegex = emojiRegex();
     if (eRegex.test(text)) {
-      user.menuState = 'stickerGetSticker';
+      user.menuState = c.stickerGetSticker;
       user.emojis = text;
       bot.sendMessage(res.getSticker, user.id);
     } else if (!eRegex.test(text)) {
@@ -42,15 +39,14 @@ async function addSticker(user, message) {
     } else {
       bot.sendMessage(res.invalidInput, user.id);
     }
-    return Promise.resolve(user);
-  }
 
-  if (user.menuState === 'stickerGetSticker') {
+    return Promise.resolve(user);
+  } else if (user.menuState === c.stickerGetSticker) {
     if (sticker) {
       try {
         const { file_id } = sticker;
         await bot.addSticker(user, file_id);
-        user.menuState = 'stickerGetEmojis';
+        user.menuState = c.stickerGetEmojis;
         bot.sendMessage(res.stickerSuccess, user.id);
       } catch (error) {
         throw new Error(error);
@@ -72,12 +68,16 @@ async function addSticker(user, message) {
         throw new Error(error);
       }
 
-      user.menuState = 'stickerGetEmojis';
+      user.menuState = c.stickerGetEmojis;
       user.emojis = '';
       bot.sendMessage(res.stickerSuccess, user.id);
     } else {
       bot.sendMessage(res.invalidInput, user.id);
     }
+
+    return Promise.resolve(user);
+  } else {
+    bot.sendMessage(res.invalidInput, user.id);
     return Promise.resolve(user);
   }
 }
