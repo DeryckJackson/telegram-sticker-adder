@@ -11,6 +11,9 @@ const invalidInput = 'I didn\'t understand that, please try again.';
 const stickerGetPackName = 'Please send me a sticker from the pack you want to add to. It needs to be a pack I have created for you.';
 const stickerSuccess = 'Success! If you want to add another sticker send me emojis to associate with it, or you can /cancel.';
 const titleTooLong = 'Sorry that name is too long, please shorten it to 64 characters or less.';
+const packSuccess = (packName) => {
+  return `Success! Your new pack can be found here. \n\n t.me/addstickers/${packName}_by_StickerAdderBot/`;
+};
 
 module.exports = {
   cancel,
@@ -23,6 +26,7 @@ module.exports = {
   invalidStickerPackName,
   invalidPackName,
   invalidInput,
+  packSuccess,
   stickerGetPackName,
   stickerSuccess,
   titleTooLong
