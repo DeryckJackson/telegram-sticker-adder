@@ -63,18 +63,16 @@ async function createPack(user, message) {
         throw new Error(error);
       }
 
-      bot.sendMessage(
-        `Success! Your new pack can be found here. \n\n t.me/addstickers/${user.packName}_by_StickerAdderBot/`,
-        user.id
-      );
+      bot.sendMessage(res.packSuccess(user.packName), user.id);
 
       user = bot.blankUser(user.id);
       return Promise.resolve(user);
     } else if (photo) {
+      let pic;
       const fileId = photo[photo.length - 1].file_id;
 
       try {
-        const pic = await bot.getFile(fileId);
+        pic = await bot.getFile(fileId);
       } catch (error) {
         throw new Error(error);
       }
@@ -85,15 +83,12 @@ async function createPack(user, message) {
         throw new Error(error);
       }
 
-      bot.sendMessage(
-        `Success! Your new pack can be found here. \n\n t.me/addstickers/${user.packName}_by_StickerAdderBot/`,
-        user.id
-      );
+      bot.sendMessage(res.packSuccess(user.packName), user.id);
 
       user = bot.blankUser(user.id);
       return Promise.resolve(user);
     } else {
-      bot.sendMessage(res.invalidInput);
+      bot.sendMessage(res.invalidInput, user.id);
       return Promise.resolve(user);
     }
   }

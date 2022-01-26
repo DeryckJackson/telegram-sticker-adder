@@ -17,12 +17,14 @@ async function addSticker(user, message) {
 
     return Promise.resolve(user);
   } else if (user.menuState === c.stickerGetPackName) {
-    if (!regex.byStickerAdderBot.test(sticker.set_name)) {
-      bot.sendMessage(res.invalidStickerPackName, user.id);
-    } else if (sticker) {
-      user.menuState = c.stickerGetEmojis;
-      user.packName = sticker.set_name;
-      bot.sendMessage(res.getEmojis, user.id);
+    if (sticker) {
+      if (!regex.byStickerAdderBot.test(sticker.set_name)) {
+        bot.sendMessage(res.invalidStickerPackName, user.id);
+      } else {
+        user.menuState = c.stickerGetEmojis;
+        user.packName = sticker.set_name;
+        bot.sendMessage(res.getEmojis, user.id);
+      }
     } else {
       bot.sendMessage(res.invalidInput, user.id);
     }
@@ -30,12 +32,14 @@ async function addSticker(user, message) {
     return Promise.resolve(user);
   } else if (user.menuState === c.stickerGetEmojis) {
     const eRegex = emojiRegex();
-    if (eRegex.test(text)) {
-      user.menuState = c.stickerGetSticker;
-      user.emojis = text;
-      bot.sendMessage(res.getSticker, user.id);
-    } else if (!eRegex.test(text)) {
-      bot.sendMessage(res.invalidEmoji, user.id);
+    if (text) {
+      if (eRegex.test(text)) {
+        user.menuState = c.stickerGetSticker;
+        user.emojis = text;
+        bot.sendMessage(res.getSticker, user.id);
+      } else {
+        bot.sendMessage(res.invalidEmoji, user.id);
+      }
     } else {
       bot.sendMessage(res.invalidInput, user.id);
     }
