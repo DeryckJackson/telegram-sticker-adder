@@ -11,6 +11,14 @@ router.get('/', async (req, res) => {
   res.status(200).send('Ok');
 });
 
+router.post('/', async (req, res) => {
+  const { body } = req;
+  const { user, file_id } = body;
+
+  bot.createPackAnimated(user, file_id);
+  res.status(200).send('Ok');
+});
+
 router.post(`/${process.env.BOT_TOKEN}`, async (req, res, next) => {
   try {
     const { body } = req;
