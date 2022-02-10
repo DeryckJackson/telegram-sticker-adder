@@ -88,16 +88,44 @@ class StickerBot {
   async createPackSticker(user, fileId) {
     const { id, packName, packTitle, emojis } = user;
 
-    const body = {
-      user_id: id,
-      name: `${packName}_by_StickerAdderBot`,
-      title: packTitle,
-      emojis,
-      png_sticker: fileId
-    };
+    const formData = new FormData();
+
+    formData.append('user_id', id);
+    formData.append('name', `${packName}_by_StickerAdderBot`);
+    formData.append('title', packTitle);
+    formData.append('png_sticker', picBuffer, 'file.png');
+    formData.append('emojis', emojis);
 
     try {
-      await this.#axios.post(`/createNewStickerSet`, body);
+      await this.#axios.post(`/createNewStickerSet`, formData, {
+        headers: formData.getHeaders()
+      });
+    } catch (error) {
+      console.error(error.response.data);
+      this.sendMessage(error.response.data.description, id);
+      throw new Error(error.response.data.description);
+    }
+
+    return Promise.resolve(true);
+  }
+
+  async createPackAnimated(user, fileId) {
+    const { id, packName, packTitle, emojis } = user;
+
+    const tgsBuffer = await this.getFile(fileId);
+
+    const formData = new FormData();
+
+    formData.append('user_id', id);
+    formData.append('name', `${packName}_by_StickerAdderBot`);
+    formData.append('title', packTitle);
+    formData.append('tgs_sticker', tgsBuffer, 'file.tgs');
+    formData.append('emojis', emojis);
+
+    try {
+      await this.#axios.post(`/createNewStickerSet`, formData, {
+        headers: formData.getHeaders()
+      });
     } catch (error) {
       console.error(error.response.data);
       this.sendMessage(error.response.data.description, id);
