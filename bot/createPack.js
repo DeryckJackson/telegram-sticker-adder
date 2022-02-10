@@ -14,6 +14,7 @@ async function createPack(user, message) {
   if (user.menuState === c.idle) {
     user.menuState = c.packGetName;
     bot.sendMessage(res.getPackName, user.id);
+
     return Promise.resolve(user);
   } else if (user.menuState === c.packGetName) {
     if (!text) {

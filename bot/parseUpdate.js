@@ -6,6 +6,7 @@ const regex = require('./regex');
 const createPack = require('./createPack');
 const addSticker = require('./addSticker');
 const res = require('./responses');
+const createAnimatedPack = require('./createAnimatedPack');
 
 async function parseUpdate(update) {
   const bot = new StickerBot(process.env.BOT_TOKEN);
@@ -40,6 +41,12 @@ async function parseUpdate(update) {
   } else if (user.menuState.slice(0, 7) === 'sticker' || regex.addStickerCommand.test(message.text)) {
     try {
       user = await addSticker(user, message);
+    } catch (error) {
+      console.error(error);
+    }
+  } else if (user.menuState.slice(0, 8) === 'animated' || regex.createAnimatedPackCommand.test(message.text)) {
+    try {
+      user = await createAnimatedPack(user, message);
     } catch (error) {
       console.error(error);
     }
