@@ -50,7 +50,7 @@ async function createAnimatedPack(user, message) {
     } else {
       user.menuState = c.animatedGetSticker;
       user.emojis = text;
-      bot.sendMessage(res.getPackSticker, user.id);
+      bot.sendMessage(res.getAnimatedPackSticker, user.id);
     }
 
     return Promise.resolve(user);

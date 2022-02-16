@@ -137,7 +137,7 @@ describe('createPack', () => {
     expect(mockSendMessage).toHaveBeenCalledWith(res.invalidEmoji, mockUser.id);
   });
 
-  it('should send packGetSticker message and set menuState to animatedGetSticker', async () => {
+  it('should send getAnimatedPackSticker message and set menuState to animatedGetSticker', async () => {
     mockUser.menuState = c.animatedGetEmojis;
     const message = {
       text: '👍'
@@ -147,7 +147,7 @@ describe('createPack', () => {
 
     expect(user.menuState).toEqual(c.animatedGetSticker);
     expect(user.emojis).toEqual(message.text);
-    expect(mockSendMessage).toHaveBeenCalledWith(res.getPackSticker, mockUser.id);
+    expect(mockSendMessage).toHaveBeenCalledWith(res.getAnimatedPackSticker, mockUser.id);
   });
 
   it('should send Success message and call createAnimatedSticker', async () => {
@@ -165,5 +165,27 @@ describe('createPack', () => {
     expect(mockBlankUser).toHaveBeenCalled();
     expect(mockSendMessage).toHaveBeenCalledWith(res.packSuccess(mockUser.packName), mockUser.id);
     expect(mockCreatePackAnimated).toHaveBeenCalledWith(mockUser, message.sticker.file_id);
+  });
+
+  it('should send invalid input message when called with animatedGetSticker menuState', async () => {
+    mockUser.menuState = c.animatedGetSticker;
+    const message = {
+      text: 'this is wrong'
+    };
+
+    const user = await createAnimatedPack(mockUser, message);
+
+    expect(mockSendMessage).toHaveBeenCalledWith(res.invalidInput, mockUser.id);
+  });
+
+  it('should send invalid input message when called with invalid menuState', async () => {
+    mockUser.menuState = 'This is wrong';
+    const message = {
+      text: 'foo'
+    };
+
+    const user = await createAnimatedPack(mockUser, message);
+
+    expect(mockSendMessage).toHaveBeenCalledWith(res.invalidInput, mockUser.id);
   });
 });
