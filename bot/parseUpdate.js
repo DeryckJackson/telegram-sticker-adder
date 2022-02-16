@@ -25,7 +25,7 @@ async function parseUpdate(update) {
   }
 
   if (!user) {
-    user = bot.blankUser(user.id);
+    user = bot.blankUser(id);
   }
 
   if (regex.cancelCommand.test(message.text)) {
