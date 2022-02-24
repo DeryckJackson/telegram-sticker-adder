@@ -32,7 +32,20 @@ async function addSticker(user, message) {
     return Promise.resolve(user);
   } else if (user.menuState === c.stickerGetEmojis) {
     const eRegex = emojiRegex();
-    if (text) {
+    if (sticker) {
+      const { file_id, emoji } = sticker;
+      user.emojis = emoji;
+
+      try {
+        await bot.addSticker(user, file_id);
+      } catch (error) {
+        throw new Error(error);
+      }
+
+      bot.sendMessage(res.stickerSuccess, user.id);
+
+      user.emojis = '';
+    } else if (text) {
       if (eRegex.test(text)) {
         user.menuState = c.stickerGetSticker;
         user.emojis = text;

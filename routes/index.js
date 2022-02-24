@@ -11,7 +11,7 @@ router.get('/', async (req, res) => {
   res.status(200).send('Ok');
 });
 
-router.post('/', (req, res) => {
+router.post(`/`, (req, res, next) => {
   try {
     const { body } = req;
 

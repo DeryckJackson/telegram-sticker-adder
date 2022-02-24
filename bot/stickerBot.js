@@ -17,8 +17,7 @@ class StickerBot {
     const formData = new FormData();
 
     formData.append('user_id', id);
-    formData.append('name', `${packName}_by_StickerAdderBot`);
-    formData.append('title', packTitle);
+    formData.append('name', packName);
     formData.append('tgs_sticker', tgsBuffer, 'file.tgs');
     formData.append('emojis', emojis);
 
