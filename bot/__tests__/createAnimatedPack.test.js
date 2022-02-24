@@ -41,12 +41,12 @@ describe('createPack', () => {
 
     const user = await createAnimatedPack(mockUser, message);
 
-    expect(user.menuState).toEqual(c.animatedGetName);
+    expect(user.menuState).toEqual(c.animatedPackGetName);
     expect(mockSendMessage).toHaveBeenCalledWith(res.getPackName, mockUser.id);
   });
 
   it('should send invalid input response', async () => {
-    mockUser.menuState = c.animatedGetName;
+    mockUser.menuState = c.animatedPackGetName;
     const message = {
       sticker: 'this isnt right'
     };
@@ -57,7 +57,7 @@ describe('createPack', () => {
   });
 
   it('should send invalid pack name response', async () => {
-    mockUser.menuState = c.animatedGetName;
+    mockUser.menuState = c.animatedPackGetName;
     const message = {
       text: 'Invalid__pack Name'
     };
@@ -68,20 +68,20 @@ describe('createPack', () => {
   });
 
   it('should send getPackTitle message and set menuState to animatedGetTitle', async () => {
-    mockUser.menuState = c.animatedGetName;
+    mockUser.menuState = c.animatedPackGetName;
     const message = {
       text: 'valid_pack_Name'
     };
 
     const user = await createAnimatedPack(mockUser, message);
 
-    expect(user.menuState).toEqual(c.animatedGetTitle);
+    expect(user.menuState).toEqual(c.animatedPackGetTitle);
     expect(user.packName).toEqual(message.text);
     expect(mockSendMessage).toHaveBeenCalledWith(res.getPackTitle, mockUser.id);
   });
 
   it('should send invalid input response in the animatedGetTitle if statement', async () => {
-    mockUser.menuState = c.animatedGetTitle;
+    mockUser.menuState = c.animatedPackGetTitle;
     const message = {
       sticker: 'this isnt right'
     };
@@ -92,7 +92,7 @@ describe('createPack', () => {
   });
 
   it('should send invalid input response in the animatedGetTitle if statement', async () => {
-    mockUser.menuState = c.animatedGetTitle;
+    mockUser.menuState = c.animatedPackGetTitle;
     const message = {
       text: 'this is too loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooonnnnnngggggggggggggggggggggggggggggggggggggggg'
     };
@@ -103,20 +103,20 @@ describe('createPack', () => {
   });
 
   it('should send getPackTitle message and set menuState to animatedGetTitle', async () => {
-    mockUser.menuState = c.animatedGetTitle;
+    mockUser.menuState = c.animatedPackGetTitle;
     const message = {
       text: 'Valid Pack Title'
     };
 
     const user = await createAnimatedPack(mockUser, message);
 
-    expect(user.menuState).toEqual(c.animatedGetEmojis);
+    expect(user.menuState).toEqual(c.animatedPackGetEmojis);
     expect(user.packTitle).toEqual(message.text);
     expect(mockSendMessage).toHaveBeenCalledWith(res.getEmojis, mockUser.id);
   });
 
   it('should send invalid input response in the animatedGetEmojis if statement', async () => {
-    mockUser.menuState = c.animatedGetEmojis;
+    mockUser.menuState = c.animatedPackGetEmojis;
     const message = {
       sticker: 'this isnt right'
     };
@@ -127,7 +127,7 @@ describe('createPack', () => {
   });
 
   it('should send invalid emoji response in the animatedGetEmojis if statement', async () => {
-    mockUser.menuState = c.animatedGetEmojis;
+    mockUser.menuState = c.animatedPackGetEmojis;
     const message = {
       text: 'this isnt a emoji'
     };
@@ -138,21 +138,21 @@ describe('createPack', () => {
   });
 
   it('should send getAnimatedPackSticker message and set menuState to animatedGetSticker', async () => {
-    mockUser.menuState = c.animatedGetEmojis;
+    mockUser.menuState = c.animatedPackGetEmojis;
     const message = {
       text: '👍'
     };
 
     const user = await createAnimatedPack(mockUser, message);
 
-    expect(user.menuState).toEqual(c.animatedGetSticker);
+    expect(user.menuState).toEqual(c.animatedPackGetSticker);
     expect(user.emojis).toEqual(message.text);
     expect(mockSendMessage).toHaveBeenCalledWith(res.getAnimatedPackSticker, mockUser.id);
   });
 
   it('should send Success message and call createAnimatedSticker', async () => {
     mockUser.packName = 'Foobar';
-    mockUser.menuState = c.animatedGetSticker;
+    mockUser.menuState = c.animatedPackGetSticker;
     const message = {
       sticker: {
         file_id: '12345',
@@ -168,7 +168,7 @@ describe('createPack', () => {
   });
 
   it('should send invalid input message when called with animatedGetSticker menuState', async () => {
-    mockUser.menuState = c.animatedGetSticker;
+    mockUser.menuState = c.animatedPackGetSticker;
     const message = {
       text: 'this is wrong'
     };

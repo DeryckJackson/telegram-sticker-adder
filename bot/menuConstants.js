@@ -1,8 +1,11 @@
 const idle = 'idle';
-const animatedGetName = 'animatedGetName';
-const animatedGetTitle = 'animatedGetTitle';
-const animatedGetEmojis = 'animatedGetEmojis';
-const animatedGetSticker = 'animatedGetSticker';
+const animatedPackGetName = 'animatedPackGetName';
+const animatedPackGetTitle = 'animatedPackGetTitle';
+const animatedPackGetEmojis = 'animatedPackGetEmojis';
+const animatedPackGetSticker = 'animatedPackGetSticker';
+const animatedStickerGetName = 'animatedStickerGetName';
+const animatedStickerGetEmojis = 'animatedStickerGetEmojis';
+const animatedStickerGetSticker = 'animatedStickerGetSticker';
 const packGetName = 'packGetName';
 const packGetTitle = 'packGetTitle';
 const packGetEmojis = 'packGetEmojis';
@@ -14,10 +17,13 @@ const stickerGetSticker = 'stickerGetSticker';
 
 module.exports = {
   idle,
-  animatedGetName,
-  animatedGetTitle,
-  animatedGetEmojis,
-  animatedGetSticker,
+  animatedPackGetName,
+  animatedPackGetTitle,
+  animatedPackGetEmojis,
+  animatedPackGetSticker,
+  animatedStickerGetName,
+  animatedStickerGetEmojis,
+  animatedStickerGetSticker,
   packGetName,
   packGetTitle,
   packGetEmojis,
