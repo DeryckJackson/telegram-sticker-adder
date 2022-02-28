@@ -11,18 +11,6 @@ router.get('/', async (req, res) => {
   res.status(200).send('Ok');
 });
 
-router.post(`/`, (req, res, next) => {
-  try {
-    const { body } = req;
-
-    parseUpdate(body);
-
-    res.status(200).send("Ok");
-  } catch (err) {
-    next(err);
-  }
-});
-
 router.post(`/${process.env.BOT_TOKEN}`, (req, res, next) => {
   try {
     const { body } = req;
