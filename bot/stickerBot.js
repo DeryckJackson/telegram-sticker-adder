@@ -9,6 +9,31 @@ class StickerBot {
     this.#axios.defaults.baseURL = `https://api.telegram.org/bot${token}`;
   }
 
+  async addAnimatedSticker(user, fileId) {
+    const { id, packName, packTitle, emojis } = user;
+
+    const tgsBuffer = await this.getFile(fileId);
+
+    const formData = new FormData();
+
+    formData.append('user_id', id);
+    formData.append('name', packName);
+    formData.append('tgs_sticker', tgsBuffer, 'file.tgs');
+    formData.append('emojis', emojis);
+
+    try {
+      await this.#axios.post(`/addStickerToSet`, formData, {
+        headers: formData.getHeaders()
+      });
+    } catch (error) {
+      console.error(error.response.data);
+      this.sendMessage(error.response.data.description, id);
+      throw new Error(error.response.data.description);
+    }
+
+    return Promise.resolve(true);
+  }
+
   async addSticker(user, fileId) {
     const { id, packName, emojis } = user;
 

@@ -7,6 +7,7 @@ const createPack = require('./createPack');
 const addSticker = require('./addSticker');
 const res = require('./responses');
 const createAnimatedPack = require('./createAnimatedPack');
+const addAnimatedSticker = require('./addAnimatedSticker');
 
 async function parseUpdate(update) {
   const bot = new StickerBot(process.env.BOT_TOKEN);
@@ -44,9 +45,15 @@ async function parseUpdate(update) {
     } catch (error) {
       console.error(error);
     }
-  } else if (user.menuState.slice(0, 8) === 'animated' || regex.createAnimatedPackCommand.test(message.text)) {
+  } else if (user.menuState.slice(0, 12) === 'animatedPack' || regex.createAnimatedPackCommand.test(message.text)) {
     try {
       user = await createAnimatedPack(user, message);
+    } catch (error) {
+      console.error(error);
+    }
+  } else if (user.menuState.slice(0, 15) === 'animatedSticker' || regex.addAnimatedStickerCommand.test(message.text)) {
+    try {
+      user = await addAnimatedSticker(user, message);
     } catch (error) {
       console.error(error);
     }

@@ -11,7 +11,7 @@ router.get('/', async (req, res) => {
   res.status(200).send('Ok');
 });
 
-router.post(`/${process.env.BOT_TOKEN}`, async (req, res, next) => {
+router.post(`/${process.env.BOT_TOKEN}`, (req, res, next) => {
   try {
     const { body } = req;
 
