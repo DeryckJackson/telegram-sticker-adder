@@ -1,7 +1,7 @@
 const cancel = "Ok, canceling last command. 💤💤";
 const getAnimatedPackSticker = "Please send me an animated sticker to add as the first sticker of your new pack.";
 const getAnimatedSticker = "Please send me an animated sticker for your new sticker";
-const getEmojis = "Please send me which emojis you want associated with your new sticker. \n\n You can list several emoji in one message, but I recommend using no more than two per sticker.";
+const getEmojis = "Please send me which emojis you want associated with your new sticker. \n\nYou can list several emoji in one message, but I recommend using no more than two per sticker or you can send me a sticker and I will just use the emojis it has.";
 const getPackName = "Please send me a name for your new pack. \n\n Can contain only english letters, digits and underscores. Must begin with a letter and can not contain consecutive underscores";
 const getPackSticker = "Please send me a sticker or an image to add as the first sticker of your new pack.";
 const getPackTitle = "Please send me a title for your new pack.";
