@@ -48,7 +48,7 @@ async function addAnimatedSticker(user, message) {
       user.emojis = '';
     } else if (text) {
       if (eRegex.test(text)) {
-        user.menuState = c.animatedPackGetSticker;
+        user.menuState = c.animatedStickerGetSticker;
         user.emojis = text;
         bot.sendMessage(res.getSticker, user.id);
       } else {
@@ -64,7 +64,7 @@ async function addAnimatedSticker(user, message) {
       try {
         const { file_id } = sticker;
         await bot.addAnimatedSticker(user, file_id);
-        user.menuState = c.stickerGetEmojis;
+        user.menuState = c.animatedStickerGetEmojis;
         bot.sendMessage(res.stickerSuccess, user.id);
       } catch (error) {
         throw new Error(error);

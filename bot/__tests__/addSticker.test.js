@@ -71,6 +71,7 @@ describe('addSticker', () => {
     const user = await addSticker(mockUser, message);
 
     expect(user.menuState).toEqual(c.stickerGetEmojis);
+    expect(user.packName).toEqual(message.sticker.set_name);
     expect(mockSendMessage).toHaveBeenCalledWith(res.getEmojis, mockUser.id);
   });
 
@@ -111,7 +112,7 @@ describe('addSticker', () => {
   it('should send invalid input message for stickerGetEmojis state', async () => {
     mockUser.menuState = c.stickerGetEmojis;
     const message = {
-      sticker: 'Wait this isnt right'
+      sticker: null
     };
 
     const user = await addSticker(mockUser, message);
@@ -158,5 +159,20 @@ describe('addSticker', () => {
     const user = await addSticker(mockUser, message);
 
     expect(mockSendMessage).toHaveBeenCalledWith(res.invalidInput, mockUser.id);
+  });
+
+  it('should call bot method addSticker after recieving a sticker', async () => {
+    mockUser.menuState = c.stickerGetEmojis;
+    const message = {
+      sticker: {
+        file_id: '12345',
+        emoji: '👍'
+      }
+    };
+
+    const user = await addSticker(mockUser, message);
+
+    expect(mockAddSticker).toHaveBeenCalledWith(user, message.sticker.file_id);
+    expect(mockSendMessage).toHaveBeenCalledWith(res.stickerSuccess, mockUser.id);
   });
 });

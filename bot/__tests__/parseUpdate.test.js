@@ -3,6 +3,7 @@ const createAnimatedPack = require('../createAnimatedPack');
 const { getUser, upsertUser } = require('../../datastore/index');
 const createPack = require('../createPack');
 const addSticker = require('../addSticker');
+const addAnimatedSticker = require('../addAnimatedSticker');
 const c = require('../menuConstants');
 const res = require('../responses');
 const parseUpdate = require('../parseUpdate');
@@ -46,6 +47,7 @@ const mockCreatePack = jest.fn();
 jest.mock('../createPack');
 jest.mock('../addSticker');
 jest.mock('../createAnimatedPack');
+jest.mock('../addAnimatedSticker');
 
 describe('parseUpdate', () => {
 
@@ -140,5 +142,21 @@ describe('parseUpdate', () => {
     const user = await parseUpdate(update);
 
     expect(createAnimatedPack).toHaveBeenCalledWith(mockUser, update.message);
+  });
+
+  it('should call createAnimatedSticker function', async () => {
+    addAnimatedSticker.mockImplementation();
+    const update = {
+      message: {
+        text: '/add_animated_sticker',
+        from: {
+          id: 12345
+        }
+      }
+    };
+
+    const user = await parseUpdate(update);
+
+    expect(addAnimatedSticker).toHaveBeenCalledWith(mockUser, update.message);
   });
 });
